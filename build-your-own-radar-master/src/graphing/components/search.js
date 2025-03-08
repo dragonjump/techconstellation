@@ -1,4 +1,5 @@
 const d3 = require('d3')
+const marked = require('marked')
 
 const AutoComplete = require('../../util/autoComplete')
 const InputSanitizer = require('../../util/inputSanitizer')
@@ -10,7 +11,7 @@ function createChatWidget(container) {
     .style('position', 'fixed')
     .style('bottom', '20px')
     .style('right', '20px')
-    .style('background-color', '#0066cc')
+    .style('background-color', '#6B46C1')
     .style('color', 'white')
     .style('width', '60px')
     .style('height', '60px')
@@ -38,10 +39,11 @@ function createChatWidget(container) {
   // Create chat widget
   const chatWidget = container.append('div')
     .style('position', 'fixed')
-    .style('bottom', '100px')
-    .style('right', '20px')
-    .style('width', '350px')
-    .style('height', '500px')
+    .style('top', '50%')
+    .style('left', '50%')
+    .style('transform', 'translate(-50%, -50%)')
+    .style('width', '50vw')
+    .style('height', '80vh')
     .style('background-color', 'white')
     .style('border-radius', '12px')
     .style('box-shadow', '0 4px 20px rgba(0,0,0,0.2)')
@@ -52,7 +54,7 @@ function createChatWidget(container) {
   // Chat header
   const chatHeader = chatWidget.append('div')
     .style('padding', '16px')
-    .style('background-color', '#0066cc')
+    .style('background-color', '#6B46C1')
     .style('color', 'white')
     .style('border-radius', '12px 12px 0 0')
     .style('display', 'flex')
@@ -89,7 +91,7 @@ function createChatWidget(container) {
     .style('outline', 'none')
 
   const sendBtn = inputContainer.append('button')
-    .style('background-color', '#0066cc')
+    .style('background-color', '#6B46C1')
     .style('color', 'white')
     .style('border', 'none')
     .style('border-radius', '20px')
@@ -116,12 +118,45 @@ function createChatWidget(container) {
       .style('justify-content', isUser ? 'flex-end' : 'flex-start')
 
     const bubble = message.append('div')
-      .style('background-color', isUser ? '#0066cc' : '#f0f0f0')
+      .style('background-color', isUser ? '#6B46C1' : '#f0f0f0')
       .style('color', isUser ? 'white' : 'black')
-      .style('padding', '8px 12px')
+      .style('padding', '12px 16px')
       .style('border-radius', '12px')
       .style('max-width', '80%')
-      .text(text)
+      .style('white-space', 'pre-wrap')
+      .style('line-height', '1.5')
+
+    if (isUser) {
+      // User messages are always plain text
+      bubble.text(text)
+    } else {
+      // Only try markdown parsing for assistant responses
+      try {
+        const formattedText = marked.parse(text)
+        bubble.html(formattedText)
+        
+        // Style markdown elements
+        bubble.selectAll('code')
+          .style('background-color', 'rgba(0,0,0,0.05)')
+          .style('padding', '2px 4px')
+          .style('border-radius', '4px')
+          .style('font-family', 'monospace')
+
+        bubble.selectAll('pre')
+          .style('background-color', 'rgba(0,0,0,0.05)')
+          .style('padding', '8px')
+          .style('border-radius', '8px')
+          .style('overflow-x', 'auto')
+
+        bubble.selectAll('a')
+          .style('color', '#6B46C1')
+          .style('text-decoration', 'underline')
+
+      } catch (e) {
+        // Fallback to plain text if markdown parsing fails
+        bubble.text(text)
+      }
+    }
 
     // Scroll to bottom
     messagesContainer.node().scrollTop = messagesContainer.node().scrollHeight
