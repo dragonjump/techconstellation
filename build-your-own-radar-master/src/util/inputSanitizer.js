@@ -30,6 +30,7 @@ const InputSanitizer = function () {
   var self = {}
   self.sanitize = function (rawBlip) {
     var blip = trimWhiteSpaces(rawBlip)
+    console.log('blip', blip);
     blip.description = sanitizeHtml(blip.description, relaxedOptions)
     blip.name = sanitizeHtml(blip.name, restrictedOptions)
     blip.isNew = sanitizeHtml(blip.isNew, restrictedOptions)
@@ -43,14 +44,27 @@ const InputSanitizer = function () {
   self.sanitizeForProtectedSheet = function (rawBlip, header) {
     var blip = trimWhiteSpaces(rawBlip)
 
+    console.log('rawBlip', rawBlip);
     const descriptionIndex = header.indexOf('description')
     const nameIndex = header.indexOf('name')
     const isNewIndex = header.indexOf('isNew')
     const statusIndex = header.indexOf('status')
     const quadrantIndex = header.indexOf('quadrant')
     const ringIndex = header.indexOf('ring')
+    let description = '';
+    try {
+      if(descriptionIndex !== -1){
+      for (const key in blip) {
+        if (!isNaN(key) && key>=descriptionIndex && blip.hasOwnProperty(key)) {
+          description += blip[key] + ' ';   
+        }
+      }
+    }
+    } catch (e) {
+      console.log('error', e);
+      description = descriptionIndex === -1 ? '' : blip[descriptionIndex]
 
-    const description = descriptionIndex === -1 ? '' : blip[descriptionIndex]
+    }
     const name = nameIndex === -1 ? '' : blip[nameIndex]
     const isNew = isNewIndex === -1 ? '' : blip[isNewIndex]
     const status = statusIndex === -1 ? '' : blip[statusIndex]
