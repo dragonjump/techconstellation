@@ -66,6 +66,8 @@ const AutoComplete = (el, quadrants, cb) => {
         
         // Call callback with first match to center view
         cb(e, matchingBlips[0])
+        cb(e, null)
+
       }
     } else {
       // Reset visibility of all blips

@@ -49,8 +49,10 @@ function renderSearch(radarHeader, quadrants) {
     .attr('id', 'auto-complete')
 
   AutoComplete('#auto-complete', quadrants, function (e, ui) {
+    if(!ui || !ui.item || !ui.item.blip) return
     const blipId = ui.item? ui.item.blip.id(): ui.blip.id()
     const quadrant = ui.item?ui.item.quadrant:ui.quadrant
+    console.log('ui',ui.blip.name())
 
     selectRadarQuadrant(quadrant.order, quadrant.startAngle, quadrant.quadrant.name())
     const blipElement = d3.select(
