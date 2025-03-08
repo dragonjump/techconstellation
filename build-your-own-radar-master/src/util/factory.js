@@ -57,6 +57,7 @@ const plotRadar = function (title, blips, currentRadarName, alternativeRadars) {
         blip.name,
         ringMap[blip.ring],
         blip.isNew.toLowerCase() === 'true',
+        blip.isStrategicDirection.toLowerCase() === 'true',
         blip.status,
         blip.topic,
         blip.description,
@@ -117,6 +118,7 @@ const plotRadarGraph = function (title, blips, currentRadarName, alternativeRada
         blip.name,
         ringMap[ring],
         blip.isNew.toLowerCase() === 'true',
+        blip.isStrategicDirection.toLowerCase() === 'true',
         blip.status,
         blip.topic,
         blip.description,
@@ -179,20 +181,23 @@ const GoogleSheet = function (sheetReference, sheetName) {
   self.authenticate = function (force = false, apiKeyEnabled, callback) {
     self.error = false
     const sheet = new Sheet(sheetReference)
+    const handleError = (error) => {
+   console.log('error',error);
+    }
     sheet.getSheet().then(() => {
       if (sheet.sheetResponse.status === 200) {
         sheet.processSheetResponse(sheetName, createBlipsForProtectedSheet, (error) => {
           if (error instanceof MalformedDataError) {
             plotErrorMessage(error, 'sheet')
           } else {
-            plotErrorMessage(sheet.createSheetNotFoundError(), 'sheet')
+            plotErrorMessage(handleError(), 'sheet')
           }
         })
         if (callback) {
           callback()
         }
       } else {
-        plotErrorMessage(sheet.createSheetNotFoundError(), 'sheet')
+        plotErrorMessage(handleError(), 'sheet')
       }
     })
   }
@@ -408,7 +413,7 @@ function plotError(exception, fileType) {
   let message
   let faqMessage = 'Please check <a href="https://www.thoughtworks.com/radar/byor">FAQs</a> for possible solutions.'
   if (featureToggles.UIRefresh2022) {
-    message = exception.message
+    message = exception?.message
     if (exception instanceof SheetNotFoundError) {
       const href = 'https://www.thoughtworks.com/radar/byor'
       faqMessage = `You can also check the <a href="${href}">FAQs</a> for other possible solutions`

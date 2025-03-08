@@ -336,6 +336,9 @@ const Radar = function (size, radar) {
       .attr('class', 'blip-link')
       .attr('id', 'blip-link-' + blip.id())
 
+      if (blip.isStrategicDirection()) {
+        triangle(blip, x, y, order, group)
+      } 
     if (blip.isNew()) {
       triangle(blip, x, y, order, group)
     } else {
