@@ -30,6 +30,15 @@ const ContentValidator = function (columnNames) {
     if (columnNames.indexOf('isStrategicDirection') === -1  ) {
       throw new MalformedDataError(ExceptionMessages.MISSING_HEADERS)
     }
+    if (columnNames.indexOf('isUsedByChildCompany1') === -1  ) {
+      throw new MalformedDataError(ExceptionMessages.MISSING_HEADERS)
+    }
+    if (columnNames.indexOf('isUsedByChildCompany2') === -1  ) {
+      throw new MalformedDataError(ExceptionMessages.MISSING_HEADERS)
+    }
+    if (columnNames.indexOf('isUsedByChildCompany3') === -1  ) {
+      throw new MalformedDataError(ExceptionMessages.MISSING_HEADERS)
+    } 
 
     // At least one of isNew or status must be present
     if (columnNames.indexOf('isNew') === -1 && columnNames.indexOf('status') === -1) {

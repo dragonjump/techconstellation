@@ -1,5 +1,6 @@
 const $ = require('jquery')
 require('jquery-ui/ui/widgets/autocomplete')
+const d3 = require('d3')
 
 const config = require('../config')
 const featureToggles = config().featureToggles
@@ -41,19 +42,35 @@ const AutoComplete = (el, quadrants, cb) => {
 
   const handleSelect = (e, ui) => {
     if (ui.item.type === 'legend') {
-      // Find the first blip that matches the filter
+      // Find the filter property
       const filterProperty = legendItems.find(item => item.name === ui.item.value).filter
       
-      const matchingBlip = blips.find(({ blip }) => {
-        const value = blip[filterProperty]
+      // Find all matching blips
+      const matchingBlips = blips.filter(({ blip }) => {
+        const value = blip[filterProperty]()
         return value === true || value === 'true' || value === 'TRUE'
       })
       
-      if (matchingBlip) {
-        // Call the original callback with the first matching blip
-        cb(e, matchingBlip)
+      if (matchingBlips.length > 0) {
+        // Hide all blips in both graph and list
+        
+        // d3.selectAll('.blip-link').style('visibility', 'hidden')
+        d3.selectAll('.blip-link').style('display', 'none')
+        // d3.selectAll('.blip-list__item-container').style('display', 'none')
+        
+        // Show only matching blips
+        matchingBlips.forEach(({ blip }) => {
+          d3.select('#blip-link-' + blip.id()).style('display', 'block')
+          d3.select(`.blip-list__item-container[data-blip-id="${blip.id()}"]`).style('display', 'block')
+        })
+        
+        // Call callback with first match to center view
+        cb(e, matchingBlips[0])
       }
     } else {
+      // Reset visibility of all blips
+      d3.selectAll('g.blip-link').style('visibility', 'visible')
+      d3.selectAll('.blip-list__item-container').style('display', 'block')
       // Handle normal blip selection
       cb(e, ui.item)
     }
