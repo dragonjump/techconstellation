@@ -31,6 +31,34 @@ const AutoComplete = (el, quadrants, cb) => {
     return [...acc, ...quadrant.quadrant.blips().map((blip) => ({ blip, quadrant }))]
   }, [])
 
+  // Add legend items to suggestions
+  const legendItems = [
+    { name: 'Strategic Direction', type: 'legend', filter: 'isStrategicDirection' },
+    { name: 'Company1', type: 'legend', filter: 'isUsedByChildCompany1' },
+    { name: 'Company2', type: 'legend', filter: 'isUsedByChildCompany2' },
+    { name: 'Company3', type: 'legend', filter: 'isUsedByChildCompany3' }
+  ]
+
+  const handleSelect = (e, ui) => {
+    if (ui.item.type === 'legend') {
+      // Find the first blip that matches the filter
+      const filterProperty = legendItems.find(item => item.name === ui.item.value).filter
+      
+      const matchingBlip = blips.find(({ blip }) => {
+        const value = blip[filterProperty]
+        return value === true || value === 'true' || value === 'TRUE'
+      })
+      
+      if (matchingBlip) {
+        // Call the original callback with the first matching blip
+        cb(e, matchingBlip)
+      }
+    } else {
+      // Handle normal blip selection
+      cb(e, ui.item)
+    }
+  }
+
   if (featureToggles.UIRefresh2022) {
     $(el).autocomplete({
       appendTo: '.search-container',
@@ -39,9 +67,15 @@ const AutoComplete = (el, quadrants, cb) => {
           const searchable = `${blip.name()} ${blip.description()}`.toLowerCase()
           return request.term.split(' ').every((term) => searchable.includes(term.toLowerCase()))
         })
-        response(matches.map((item) => ({ ...item, value: item.blip.name() })))
+
+        // Add matching legend items
+        const matchingLegendItems = legendItems.filter(item => 
+          item.name.toLowerCase().includes(request.term.toLowerCase())
+        ).map(item => ({ value: item.name, type: 'legend' }))
+
+        response([...matches.map((item) => ({ ...item, value: item.blip.name() })), ...matchingLegendItems])
       },
-      select: cb.bind({}),
+      select: handleSelect,
     })
   } else {
     $(el).radarcomplete({
@@ -50,9 +84,15 @@ const AutoComplete = (el, quadrants, cb) => {
           const searchable = `${blip.name()} ${blip.description()}`.toLowerCase()
           return request.term.split(' ').every((term) => searchable.includes(term.toLowerCase()))
         })
-        response(matches.map((item) => ({ ...item, value: item.blip.name() })))
+
+        // Add matching legend items
+        const matchingLegendItems = legendItems.filter(item => 
+          item.name.toLowerCase().includes(request.term.toLowerCase())
+        ).map(item => ({ value: item.name, type: 'legend' }))
+
+        response([...matches.map((item) => ({ ...item, value: item.blip.name() })), ...matchingLegendItems])
       },
-      select: cb.bind({}),
+      select: handleSelect,
     })
   }
 }
