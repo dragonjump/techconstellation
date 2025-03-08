@@ -1,6 +1,7 @@
 const $ = require('jquery')
 require('jquery-ui/ui/widgets/autocomplete')
 const d3 = require('d3')
+const InputSanitizer = require('./inputSanitizer')
 
 const config = require('../config')
 const featureToggles = config().featureToggles
@@ -28,6 +29,7 @@ $.widget('custom.radarcomplete', $.ui.autocomplete, {
 })
 
 const AutoComplete = (el, quadrants, cb) => {
+  const inputSanitizer = new InputSanitizer()
   const blips = quadrants.reduce((acc, quadrant) => {
     return [...acc, ...quadrant.quadrant.blips().map((blip) => ({ blip, quadrant }))]
   }, [])
@@ -45,34 +47,16 @@ const AutoComplete = (el, quadrants, cb) => {
       // Find the filter property
       const filterProperty = legendItems.find(item => item.name === ui.item.value).filter
       
-      // Find all matching blips
-      const matchingBlips = blips.filter(({ blip }) => {
-        const value = blip[filterProperty]()
-        return value === true || value === 'true' || value === 'TRUE'
-      })
+      // Use the common filter function
+      const matchingBlips = inputSanitizer.filterAndDisplayBlips(blips, filterProperty)
       
       if (matchingBlips.length > 0) {
-        // Hide all blips in both graph and list
-        
-        // d3.selectAll('.blip-link').style('visibility', 'hidden')
-        d3.selectAll('.blip-link').style('display', 'none')
-        // d3.selectAll('.blip-list__item-container').style('display', 'none')
-        
-        // Show only matching blips
-        matchingBlips.forEach(({ blip }) => {
-          d3.select('#blip-link-' + blip.id()).style('display', 'block')
-          d3.select(`.blip-list__item-container[data-blip-id="${blip.id()}"]`).style('display', 'block')
-        })
-        
         // Call callback with first match to center view
         cb(e, matchingBlips[0])
-        cb(e, null)
-
       }
     } else {
-      // Reset visibility of all blips
-      d3.selectAll('g.blip-link').style('visibility', 'visible')
-      d3.selectAll('.blip-list__item-container').style('display', 'block')
+      // Reset display using common function
+      inputSanitizer.resetBlipsDisplay()
       // Handle normal blip selection
       cb(e, ui.item)
     }

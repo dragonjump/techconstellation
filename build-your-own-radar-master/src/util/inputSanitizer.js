@@ -2,6 +2,7 @@ const sanitizeHtml = require('sanitize-html')
 const _ = {
   forOwn: require('lodash/forOwn'),
 }
+const d3 = require('d3')
 
 const InputSanitizer = function () {
   var relaxedOptions = {
@@ -30,28 +31,57 @@ const InputSanitizer = function () {
     return processedBlip
   }
 
+  // Common function to filter and display blips
+  function filterAndDisplayBlips(blips, filterProperty) {
+    // Find all matching blips
+    const matchingBlips = blips.filter(({ blip }) => {
+      const value = blip[filterProperty]()
+      return value === true || value === 'true' || value === 'TRUE'
+    })
+    
+    if (matchingBlips.length > 0) {
+      // Hide all blips in both graph and list
+      d3.selectAll('.blip-link').style('display', 'none')
+      d3.selectAll('.blip-list__item-container').style('display', 'none')
+      
+      // Show only matching blips
+      matchingBlips.forEach(({ blip }) => {
+        d3.select('#blip-link-' + blip.id()).style('display', 'block')
+        d3.select(`.blip-list__item-container[data-blip-id="${blip.id()}"]`).style('display', 'block')
+      })
+    }
+    
+    return matchingBlips
+  }
+
+  // Reset display of all blips
+  function resetBlipsDisplay() {
+    d3.selectAll('.blip-link').style('display', 'block')
+    d3.selectAll('.blip-list__item-container').style('display', 'block')
+  }
+
   function generateLegendHTML() {
     return `
       <div class="legend-container" style="margin-bottom: 15px; font-size: 10px;">
-        <div class="legend-item" >
+        <div class="legend-item" style="margin-top: 20px;">
           <span class="legend-wrapper">
             <img src="/images/star.svg" alt="Strategic Direction" style="width: 14px; height: 14px; vertical-align: middle;"/>
             <small class="legend-icon" style="font-size: 10px; margin-left: 3px; color: #666;">STRATEGIC</small>
           </span>
         </div>
-        <div class="legend-item" >
+        <div class="legend-item" style="margin-top: 12px;">
           <span class="legend-wrapper">
             <img src="/images/company1.svg" alt="Used by Company 1" style="width: 14px; height: 14px; vertical-align: middle;"/>
             <small class="legend-icon" style="font-size: 10px; margin-left: 3px; color: #666;">COMPANY1</small>
           </span>
         </div>
-        <div class="legend-item" >
+        <div class="legend-item" style="margin-top: 12px;">
           <span class="legend-wrapper">
             <img src="/images/company2.svg" alt="Used by Company 2" style="width: 14px; height: 14px; vertical-align: middle;"/>
             <small class="legend-icon" style="font-size: 10px; margin-left: 3px; color: #666;">COMPANY2</small>
           </span>
         </div>
-        <div class="legend-item" >
+        <div class="legend-item" style="margin-top: 12px;">
           <span class="legend-wrapper">
             <img src="/images/company3.svg" alt="Used by Company 3" style="width: 14px; height: 14px; vertical-align: middle;"/>
             <small class="legend-icon" style="font-size: 10px; margin-left: 3px; color: #666;">COMPANY3</small>
@@ -184,6 +214,10 @@ const InputSanitizer = function () {
   self.generateLegend = function () {
     return sanitizeHtml(generateLegendHTML(), relaxedOptions);
   }
+
+  // Add the new methods to the public interface
+  self.filterAndDisplayBlips = filterAndDisplayBlips
+  self.resetBlipsDisplay = resetBlipsDisplay
 
   return self
 }
