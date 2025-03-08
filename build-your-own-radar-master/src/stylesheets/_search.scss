@@ -12,6 +12,17 @@
     }
   }
 
+  .legend-container {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 0 16px;
+    margin-bottom: 16px;
+    background-color: #fff;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
   .search-container {
     height: auto;
     margin: 48px auto 40px;
