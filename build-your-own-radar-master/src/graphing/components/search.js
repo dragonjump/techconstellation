@@ -11,7 +11,7 @@ function createChatWidget(container) {
     .style('position', 'fixed')
     .style('bottom', '20px')
     .style('right', '20px')
-    .style('background-color', '#6B46C1')
+    .style('background-color', '#635080')
     .style('color', 'white')
     .style('width', '60px')
     .style('height', '60px')
@@ -54,7 +54,7 @@ function createChatWidget(container) {
   // Chat header
   const chatHeader = chatWidget.append('div')
     .style('padding', '16px')
-    .style('background-color', '#6B46C1')
+    .style('background-color', '#635080')
     .style('color', 'white')
     .style('border-radius', '12px 12px 0 0')
     .style('display', 'flex')
@@ -94,7 +94,7 @@ function createChatWidget(container) {
     .style('line-height', '1.5')
 
   const sendBtn = inputContainer.append('button')
-    .style('background-color', '#6B46C1')
+    .style('background-color', '#635080')
     .style('color', 'white')
     .style('border', 'none')
     .style('border-radius', '20px')
@@ -127,7 +127,7 @@ function createChatWidget(container) {
       .style('justify-content', isUser ? 'flex-end' : 'flex-start')
 
     const bubble = message.append('div')
-      .style('background-color', isUser ? '#6B46C1' : '#f0f0f0')
+      .style('background-color', isUser ? '#635080' : '#f0f0f0')
       .style('color', isUser ? 'white' : 'black')
       .style('padding', '12px 16px')
       .style('border-radius', '12px')
@@ -158,7 +158,7 @@ function createChatWidget(container) {
           .style('overflow-x', 'auto')
 
         bubble.selectAll('a')
-          .style('color', '#6B46C1')
+          .style('color', '#635080')
           .style('text-decoration', 'underline')
 
       } catch (e) {

@@ -31,7 +31,7 @@ const Sheet = function (sheetReference) {
         status: 200,
         result: {
           properties: {
-            title: 'Tech Constellation Radar'
+            title: 'A universified view of the tech landscape'
           },
           sheets: [{
             properties: {

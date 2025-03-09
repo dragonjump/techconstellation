@@ -317,7 +317,7 @@ const Factory = function () {
 }
 
 function setDocumentTitle() {
-  document.title = 'Build your own Radar'
+  document.title = 'Tech Constellation'
 }
 
 function plotLoading(content) {
@@ -331,7 +331,7 @@ function plotLoading(content) {
     plotLogo(content)
 
     var bannerText =
-      '<h1>Building your radar...</h1><p>Your Technology Radar will be available in just a few seconds</p>'
+      '<h1>Loading your tech constellation...</h1><p>Your Technology Landscape will be available in just a few seconds</p>'
     plotBanner(content, bannerText)
     plotFooter(content)
   } else {
@@ -400,7 +400,7 @@ function plotErrorMessage(exception, fileType) {
     plotLogo(content)
 
     const bannerText =
-      '<div><h1>Build your own radar</h1><p>Once you\'ve <a href ="https://www.thoughtworks.com/radar/byor">created your Radar</a>, you can use this service' +
+      '<div><h1>Tech Constellation</h1><p>Once you\'ve <a href ="https://www.thoughtworks.com/radar/byor">created your Radar</a>, you can use this service' +
       ' to generate an <br />interactive version of your Technology Radar. Not sure how? <a href ="https://www.thoughtworks.com/radar/byor">Read this first.</a></p></div>'
 
     plotBanner(content, bannerText)
@@ -467,7 +467,7 @@ function plotUnauthorizedErrorMessage() {
 
     plotLogo(content)
 
-    const bannerText = '<div><h1>Build your own radar</h1></div>'
+    const bannerText = '<div><h1>Tech Constellation</h1></div>'
 
     plotBanner(content, bannerText)
 
