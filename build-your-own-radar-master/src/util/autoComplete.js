@@ -49,7 +49,7 @@ const AutoComplete = (el, quadrants, cb) => {
       
       // Use the common filter function
       const matchingBlips = inputSanitizer.filterAndDisplayBlips(blips, filterProperty)
-      
+       
       if (matchingBlips.length > 0) {
         // Call callback with first match to center view
         cb(e, matchingBlips[0])
@@ -58,7 +58,7 @@ const AutoComplete = (el, quadrants, cb) => {
       // Reset display using common function
       inputSanitizer.resetBlipsDisplay()
       // Handle normal blip selection
-      cb(e, ui.item)
+      cb(e, ui)
     }
   }
 

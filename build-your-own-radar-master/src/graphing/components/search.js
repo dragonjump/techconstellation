@@ -81,14 +81,17 @@ function createChatWidget(container) {
     .style('display', 'flex')
     .style('gap', '8px')
 
-  const chatInput = inputContainer.append('input')
-    .attr('type', 'text')
+  const chatInput = inputContainer.append('textarea')
     .attr('placeholder', 'Ask about the radar...')
     .style('flex-grow', '1')
     .style('padding', '8px 12px')
     .style('border', '1px solid #ddd')
-    .style('border-radius', '20px')
+    .style('border-radius', '12px')
     .style('outline', 'none')
+    .style('resize', 'none')
+    .style('height', '60px')
+    .style('font-family', 'inherit')
+    .style('line-height', '1.5')
 
   const sendBtn = inputContainer.append('button')
     .style('background-color', '#6B46C1')
@@ -97,6 +100,7 @@ function createChatWidget(container) {
     .style('border-radius', '20px')
     .style('padding', '8px 16px')
     .style('cursor', 'pointer')
+    .style('align-self', 'flex-end')
     .text('Send')
 
   // Toggle chat widget visibility
@@ -104,6 +108,11 @@ function createChatWidget(container) {
     const isVisible = chatWidget.style('display') !== 'none'
     chatWidget.style('display', isVisible ? 'none' : 'flex')
     overlay.style('display', isVisible ? 'none' : 'block')
+    
+    // Add welcome message when opening chat
+    if (!isVisible) {
+      addMessage("Hi, I am AI Architect. I can help you understand the radar and its technologies. How can I assist you today?", false)
+    }
   }
 
   floatingBtn.on('click', toggleChat)
@@ -171,7 +180,7 @@ function createChatWidget(container) {
     chatInput.property('value', '')
 
     try {
-      const response = await fetch('https://n8n.jom.lol/webhook/radar-rag', {
+      const response = await fetch('https://n8n.jom.lol/webhook-test/radar-rag', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -274,10 +283,11 @@ function renderSearch(radarHeader, quadrants) {
     .attr('id', 'auto-complete')
 
   AutoComplete('#auto-complete', quadrants, function (e, ui) {
+    debugger
     if (!ui || !ui.item || !ui.item.blip) return
     const blipId = ui.item ? ui.item.blip.id() : ui.blip.id()
     const quadrant = ui.item ? ui.item.quadrant : ui.quadrant
-    console.log('ui', ui.blip.name())
+ 
 
     selectRadarQuadrant(quadrant.order, quadrant.startAngle, quadrant.quadrant.name())
     const blipElement = d3.select(
