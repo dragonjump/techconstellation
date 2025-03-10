@@ -207,6 +207,31 @@ function renderLegend(radarHeader, quadrants) {
   const legendContainer = radarHeader.append('div').classed('legend-container', true)
   const inputSanitizer = new InputSanitizer()
 
+  // Add filter header with icon
+  const filterHeader = legendContainer.append('div')
+    .classed('filter-header', true)
+    .on('click', function() {
+      const content = legendContainer.select('.filter-content');
+      const isCollapsed = content.classed('collapsed');
+      
+      // Toggle collapsed state
+      content.classed('collapsed', !isCollapsed);
+      filterHeader.classed('collapsed', !isCollapsed);
+    })
+
+  filterHeader.append('span')
+    .classed('filter-title', true)
+    .text('Filter by')
+
+  // Add filter icon using SVG (using a chevron instead of filter icon for better UX)
+  const filterIcon = filterHeader.append('div')
+    .classed('filter-icon', true)
+    .html('<svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>')
+
+  // Create a container for filter content
+  const filterContent = legendContainer.append('div')
+    .classed('filter-content', true)
+
   // Convert quadrants to blips format expected by filter function
   const blips = quadrants.reduce((acc, quadrant) => {
     return [...acc, ...quadrant.quadrant.blips().map((blip) => ({ blip, quadrant }))]
@@ -222,7 +247,7 @@ function renderLegend(radarHeader, quadrants) {
   let activeFilter = null;
 
   legendItems.forEach(item => {
-    const itemDiv = legendContainer.append('div')
+    const itemDiv = filterContent.append('div')
       .classed('legend-item', true)
       .style('margin-top', '12px')
       .style('display', 'flex')

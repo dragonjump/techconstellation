@@ -1,0 +1,34 @@
+// Custom scrollbar styling
+$amethyst: #634f7d;
+$amethyst-light: #8f73b4;
+
+// For Webkit browsers (Chrome, Safari, etc.)
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(155, 89, 182, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+  background: $amethyst;
+  border-radius: 4px;
+  
+  &:hover {
+    background: $amethyst-light;
+  }
+}
+
+// For Firefox
+* {
+  scrollbar-width: thin;
+  scrollbar-color: $amethyst rgba(155, 89, 182, 0.1);
+}
+
+// For Edge and other browsers that support standard scrollbar properties
+* {
+  scrollbar-width: thin;
+  scrollbar-color: $amethyst rgba(155, 89, 182, 0.1);
+} 

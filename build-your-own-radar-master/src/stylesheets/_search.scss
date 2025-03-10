@@ -17,17 +17,68 @@
     max-width: 400px;
     margin: 0 auto;
     padding: 0 16px;
-    margin-top:22px;
+    margin-top: 22px;
     margin-bottom: 26px;
     background-color: #fff;
     border-radius: 4px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     padding-top: 20px;
     padding-bottom: 20px;
+
+    .filter-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 12px;
+      cursor: pointer;
+      user-select: none;
+      
+      .filter-title {
+        font-size: 14px;
+        font-weight: 600;
+        color: $wave;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .filter-icon {
+        margin-left: 8px;
+        width: 16px;
+        height: 16px;
+        transition: transform 0.3s ease;
+
+        svg {
+          fill: $wave;
+        }
+      }
+
+      &.collapsed .filter-icon {
+        transform: rotate(-180deg);
+      }
+    }
+
+    .filter-content {
+      transition: max-height 0.3s ease-out, opacity 0.2s ease-out;
+      max-height: 500px;
+      opacity: 1;
+      overflow: hidden;
+
+      &.collapsed {
+        max-height: 0;
+        opacity: 0;
+        margin: 0;
+      }
+    }
   }
+  
   .legend-item {
     margin: 0 3px;
-  margin-top: 12px;
+    margin-top: 12px;
+    transition: opacity 0.2s ease;
+
+    &:hover {
+      opacity: 0.7;
+      cursor: pointer;
+    }
   }
   
 
@@ -126,3 +177,4 @@
 .ui-autocomplete {
   z-index: 30 !important;
 }
+
