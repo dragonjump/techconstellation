@@ -86,6 +86,7 @@ const InputSanitizer = function () {
             <img src="/images/company3.svg" alt="Used by Company 3" style="width: 14px; height: 14px; vertical-align: middle;"/>
             <small class="legend-icon" style="font-size: 10px; margin-left: 3px; color: #666;">COMPANY3</small>
           </span>
+          <br/>
         </div>
       </div>
     `;

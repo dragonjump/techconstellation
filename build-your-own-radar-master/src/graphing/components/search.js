@@ -61,7 +61,7 @@ function createChatWidget(container) {
     .style('justify-content', 'space-between')
     .style('align-items', 'center')
 
-  chatHeader.append('div').text('Radar Assistant')
+  chatHeader.append('div').text('Stellar (ai assistant)')
 
   const closeBtn = chatHeader.append('div')
     .style('cursor', 'pointer')
@@ -82,7 +82,7 @@ function createChatWidget(container) {
     .style('gap', '8px')
 
   const chatInput = inputContainer.append('textarea')
-    .attr('placeholder', 'Ask about the radar...')
+    .attr('placeholder', 'Ask about the a company or  tech and its adoption strategy...')
     .style('flex-grow', '1')
     .style('padding', '8px 12px')
     .style('border', '1px solid #ddd')
@@ -111,7 +111,7 @@ function createChatWidget(container) {
     
     // Add welcome message when opening chat
     if (!isVisible) {
-      addMessage("Hi, I am AI Architect. I can help you understand the radar and its technologies. How can I assist you today?", false)
+      addMessage("Hi, I am Stella (AI Architect Assistant ). I can help you understand the specific tech landscape and its technologies. How can I assist you today?", false)
     }
   }
 

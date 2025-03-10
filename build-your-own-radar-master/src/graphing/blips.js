@@ -112,14 +112,15 @@ function blipAssistiveText(blip) {
     : `${blip.ring().name()} ring, ${blip.name()}, ${blip.status()}.`
 }
 function addOuterCircle(parentSvg, order, scale = 1) {
+  // Create a regular hexagon centered at (18, 18) with radius 18
+  const hexagonPath = 'M33.6 27L33.6 9L18 0L2.4 9L2.4 27L18 36L33.6 27Z' +
+                     'M30.6 25.5L30.6 10.5L18 3L5.4 10.5L5.4 25.5L18 33L30.6 25.5Z'
+
   parentSvg
     .append('path')
     .attr('opacity', '1')
     .attr('class', order)
-    .attr(
-      'd',
-      'M18 36C8.07 36 0 27.93 0 18S8.07 0 18 0c9.92 0 18 8.07 18 18S27.93 36 18 36zM18 3.14C9.81 3.14 3.14 9.81 3.14 18S9.81 32.86 18 32.86S32.86 26.19 32.86 18S26.19 3.14 18 3.14z',
-    )
+    .attr('d', hexagonPath)
     .style('transform', `scale(${scale})`)
 }
 
@@ -187,11 +188,13 @@ function drawBlipCircle(group, blip, xValue, yValue, order) {
   group
     .attr('transform', `scale(1) translate(${xValue - 16}, ${yValue - 16})`)
     .attr('aria-label', blipAssistiveText(blip))
+  
+  // Create hexagon path centered at (18, 18) with radius 12
+  const hexagonPath = 'M18 6L28.4 12L28.4 24L18 30L7.6 24L7.6 12L18 6Z'
+  
   group
-    .append('circle')
-    .attr('r', '12')
-    .attr('cx', '18')
-    .attr('cy', '18')
+    .append('path')
+    .attr('d', hexagonPath)
     .attr('class', order)
     .style('transform', `scale(${blip.scale || 1})`)
 }
