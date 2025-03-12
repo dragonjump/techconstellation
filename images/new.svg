@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 25.4.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+	 viewBox="0 0 150 150" style="enable-background:new 0 0 150 150;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#003D4F;}
+</style>
+<!-- Inner hexagon -->
+<path class="st0" d="M75 46.67L98.33 60v26.67L75 100L51.67 86.67V60L75 46.67z"/>
+<!-- Outer hexagon border -->
+<path class="st0" d="M75,119.17L35.83,95V46.67L75,22.5l39.17,24.17V95L75,119.17z M43.54,90.83L75,111.46l31.46-20.63V50.83L75,30.21
+	L43.54,50.83V90.83z"/>
+</svg>
