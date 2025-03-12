@@ -5,6 +5,97 @@ const AutoComplete = require('../../util/autoComplete')
 const InputSanitizer = require('../../util/inputSanitizer')
 const { selectRadarQuadrant, removeScrollListener } = require('../components/quadrants')
 
+function createExcelWidget(container) {
+  // Create floating Excel button
+  const excelBtn = container.append('div')
+    .style('position', 'fixed')
+    .style('bottom', '100px')  // Position above chat button
+    .style('right', '20px')
+    .style('background-color', '#217346')  // Excel green color
+    .style('color', 'white')
+    .style('width', '60px')
+    .style('height', '60px')
+    .style('border-radius', '50%')
+    .style('display', 'flex')
+    .style('align-items', 'center')
+    .style('justify-content', 'center')
+    .style('cursor', 'pointer')
+    .style('box-shadow', '0 2px 10px rgba(0,0,0,0.2)')
+    .style('z-index', '1000')
+    .html('<svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M21 5c0-1.1-.9-2-2-2h-14c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-14zm-14 14v-14h14v14h-14zm2-12v2h10v-2h-10zm0 4v2h10v-2h-10zm0 4v2h10v-2h-10z"/></svg>')
+
+  // Create modal overlay
+  const modalOverlay = container.append('div')
+    .style('position', 'fixed')
+    .style('top', '0')
+    .style('left', '0')
+    .style('width', '100%')
+    .style('height', '100%')
+    .style('background-color', 'rgba(0,0,0,0.5)')
+    .style('backdrop-filter', 'blur(5px)')
+    .style('display', 'none')
+    .style('z-index', '1001')
+
+  // Create modal
+  const modal = container.append('div')
+    .style('position', 'fixed')
+    .style('top', '50%')
+    .style('left', '50%')
+    .style('transform', 'translate(-50%, -50%)')
+    .style('width', '80vw')
+    .style('max-width', '1200px')
+    .style('background-color', 'white')
+    .style('border-radius', '12px')
+    .style('box-shadow', '0 4px 20px rgba(0,0,0,0.2)')
+    .style('display', 'none')
+    .style('z-index', '1002')
+    .style('overflow', 'hidden')
+
+  // Add close button to modal
+  const closeBtn = modal.append('div')
+    .style('position', 'absolute')
+    .style('top', '10px')
+    .style('right', '10px')
+    .style('cursor', 'pointer')
+    .style('font-size', '24px')
+    .style('width', '40px')
+    .style('height', '40px')
+    .style('border-radius', '50%')
+    .style('background-color', 'rgba(0,0,0,0.1)')
+    .style('display', 'flex')
+    .style('align-items', 'center')
+    .style('justify-content', 'center')
+    .text('×')
+
+  // Add landscape image to modal
+  const imageLink = modal.append('a')
+    .attr('href', 'https://docs.google.com/spreadsheets/d/1R8nj0SXWWmkMaLg0iHt6K0RuTsbUZ5TvMmZwkQkDAyk/edit?gid=0#gid=0')
+    .attr('target', '_blank')
+    .style('display', 'block')
+    .on('click', (event) => {
+      event.stopPropagation(); // Prevent modal from closing when clicking the link
+    });
+
+  imageLink.append('img')
+    .attr('src', '/images/image0.png')
+    .style('width', '100%')
+    .style('height', 'auto')
+    .style('display', 'block')
+    .style('object-fit', 'cover')
+    .style('cursor', 'pointer');
+
+  // Toggle modal visibility
+  function toggleModal() {
+    const isVisible = modal.style('display') !== 'none'
+    modal.style('display', isVisible ? 'none' : 'block')
+    modalOverlay.style('display', isVisible ? 'none' : 'block')
+  }
+
+  excelBtn.on('click', toggleModal)
+  closeBtn.on('click', toggleModal)
+  modalOverlay.on('click', toggleModal)
+}
+
 function createChatWidget(container) {
   // Create floating button
   const floatingBtn = container.append('div')
@@ -374,7 +465,6 @@ function renderSearch(radarHeader, quadrants) {
     const blipId = ui.item ? ui.item.blip.id() : ui.blip.id()
     const quadrant = ui.item ? ui.item.quadrant : ui.quadrant
  
-
     selectRadarQuadrant(quadrant.order, quadrant.startAngle, quadrant.quadrant.name())
     const blipElement = d3.select(
       `.blip-list__item-container[data-blip-id="${blipId}"] .blip-list__item-container__name`,
@@ -390,6 +480,8 @@ function renderSearch(radarHeader, quadrants) {
     }, 1500)
   })
 
+  // Create Excel widget first (so it appears below chat)
+  createExcelWidget(d3.select('body'))
   // Create chat widget
   createChatWidget(d3.select('body'))
 }
