@@ -124,7 +124,8 @@ function createChatWidget(container) {
     const message = messagesContainer.append('div')
       .style('margin-bottom', '12px')
       .style('display', 'flex')
-      .style('justify-content', isUser ? 'flex-end' : 'flex-start')
+      .style('flex-direction', 'column')
+      .style('align-items', isUser ? 'flex-end' : 'flex-start')
 
     const bubble = message.append('div')
       .style('background-color', isUser ? '#635080' : '#f0f0f0')
@@ -134,6 +135,14 @@ function createChatWidget(container) {
       .style('max-width', '80%')
       .style('white-space', 'pre-wrap')
       .style('line-height', '1.5')
+
+    // Add timestamp
+    const timestamp = message.append('div')
+      .style('font-size', '10px')
+      .style('color', '#666')
+      .style('margin-top', '4px')
+      .style('padding', '0 4px')
+      .text(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }))
 
     if (isUser) {
       // User messages are always plain text
@@ -224,7 +233,7 @@ function createChatWidget(container) {
     const loadingMessage = addLoadingAnimation()
 
     try {
-      const response = await fetch('https://n8n.jom.lol/webhook-test/radar-rag', {
+      const response = await fetch('https://n8n.jom.lol/webhook/radar-rag', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
