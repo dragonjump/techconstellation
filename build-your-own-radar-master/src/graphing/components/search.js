@@ -270,6 +270,7 @@ function renderLegend(radarHeader, quadrants) {
   filterHeader.append('span')
     .classed('filter-title', true)
     .text('Filter by')
+    .style('font-size', '16px')
 
   // Add filter icon using SVG (using a chevron instead of filter icon for better UX)
   const filterIcon = filterHeader.append('div')
@@ -317,6 +318,9 @@ function renderLegend(radarHeader, quadrants) {
       .text(item.text)
 
     itemDiv.on('click', function () {
+      setTimeout(() => {
+        document.getElementById('subnav-item-all-quadrants').querySelector('.quadrant-subnav__list-item__button').click();
+      }, 2300)
       // If clicking the same filter again, reset
       if (activeFilter === item.filter) {
         inputSanitizer.resetBlipsDisplay()
