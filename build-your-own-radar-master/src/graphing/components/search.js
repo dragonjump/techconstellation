@@ -169,6 +169,47 @@ function createChatWidget(container) {
 
     // Scroll to bottom
     messagesContainer.node().scrollTop = messagesContainer.node().scrollHeight
+    return message
+  }
+
+  // Add loading animation
+  function addLoadingAnimation() {
+    const message = messagesContainer.append('div')
+      .style('margin-bottom', '12px')
+      .style('display', 'flex')
+      .style('justify-content', 'flex-start')
+
+    const bubble = message.append('div')
+      .style('background-color', '#f0f0f0')
+      .style('padding', '12px 16px')
+      .style('border-radius', '12px')
+      .style('display', 'flex')
+      .style('align-items', 'center')
+      .style('gap', '4px')
+
+    // Add three bouncing dots
+    for (let i = 0; i < 3; i++) {
+      bubble.append('div')
+        .style('width', '8px')
+        .style('height', '8px')
+        .style('background-color', '#635080')
+        .style('border-radius', '50%')
+        .style('animation', 'bounce 1.4s infinite')
+        .style('animation-delay', `${i * 0.16}s`)
+        .style('opacity', '0.6')
+    }
+
+    // Add keyframe animation style
+    const style = document.createElement('style')
+    style.textContent = `
+      @keyframes bounce {
+        0%, 80%, 100% { transform: translateY(0); }
+        40% { transform: translateY(-8px); }
+      }
+    `
+    document.head.appendChild(style)
+
+    return message
   }
 
   // Handle send message
@@ -178,6 +219,9 @@ function createChatWidget(container) {
 
     addMessage(text, true)
     chatInput.property('value', '')
+
+    // Add loading animation
+    const loadingMessage = addLoadingAnimation()
 
     try {
       const response = await fetch('https://n8n.jom.lol/webhook-test/radar-rag', {
@@ -189,8 +233,12 @@ function createChatWidget(container) {
       })
 
       const data = await response.json()
+      // Remove loading animation
+      loadingMessage.remove()
       addMessage(data[0].output)
     } catch (error) {
+      // Remove loading animation
+      loadingMessage.remove()
       addMessage('Sorry, there was an error processing your request.')
     }
   }
