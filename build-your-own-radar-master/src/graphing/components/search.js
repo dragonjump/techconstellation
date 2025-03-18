@@ -202,7 +202,7 @@ function createChatWidget(container) {
     
     // Add welcome message when opening chat
     if (!isVisible) {
-      addMessage("Hi, I am Stella (AI Architect Assistant ). I can help you understand the specific tech landscape and its technologies. How can I assist you today?", false)
+      addMessage("Hi, I am Scaler (AI Agent Assistant ). I can help you understand the specific tech landscape and its technologies. How can I assist you today?", false)
     }
   }
 
